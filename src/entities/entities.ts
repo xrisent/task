@@ -1,15 +1,13 @@
-export interface Specie {
-    name: string;
-}
-
 export interface Location {
+    id: number;
     name: string;
 }
 
 export interface Character {
+    id: number;
     name: string;
     image: string;
     status: string;
-    species: Specie;
+    species: string;
     location: Location
 }
