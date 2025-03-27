@@ -4,10 +4,11 @@ import { useState } from "react";
 import { fetchCharacters } from "@/features/rickAndMortyApiGet";
 import { CustomButton } from "@/shared/CustomButton/CustomButton";
 import { CustomInput } from "@/shared/CustomInput/CustomInput";
+import { Character } from "@/entities/entities";
 
 export const FindForm: React.FC = () => {
     const [name, setName] = useState("");
-    const [characters, setCharacters] = useState<any[]>([]);
+    const [characters, setCharacters] = useState<Character[]>([]);
 
     const handleSearch = async () => {
         const data = await fetchCharacters(name, 1);
