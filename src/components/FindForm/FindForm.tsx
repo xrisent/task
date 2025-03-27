@@ -1,35 +1,23 @@
-"use client"
+"use client";
 
 import { useState } from "react";
-import { fetchCharacters } from "@/features/rickAndMortyApiGet";
 import { CustomButton } from "@/shared/CustomButton/CustomButton";
 import { CustomInput } from "@/shared/CustomInput/CustomInput";
-import { Character } from "@/entities/entities";
 
-export const FindForm: React.FC = () => {
+export const FindForm: React.FC<{ onSearch: (name: string) => void }> = ({ onSearch }) => {
     const [name, setName] = useState("");
-    const [characters, setCharacters] = useState<Character[]>([]);
 
-    const handleSearch = async () => {
-        const data = await fetchCharacters(name, 1);
-        if (data) {
-            setCharacters(data.results);
-        }
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        onSearch(name);
     };
 
     return (
-        <div className="m-10">
-            <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
+        <div>
+            <form onSubmit={handleSearch}>
                 <CustomInput value={name} onChange={(e) => setName(e.target.value)} />
                 <CustomButton type="submit" />
             </form>
-
-            <div className="mt-5">
-                {characters.map((char) => (
-                    <div key={char.id} className="p-2 border-b">{char.name}</div>
-                ))}
-            </div>
-
         </div>
     );
 };
