@@ -12,9 +12,21 @@ export default function Home() {
     const [characters, setCharacters] = useState<Character[]>([]);
     const [totalPages, setTotalPages] = useState(0);
     const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false); 
+
+    // добавил для того чтобы увидеть точки эти
+    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
     const handleSearch = async (name: string) => {
+
+        setLoading(true); 
+        setCharacters([])
+
+        // добавил для того чтобы увидеть точки эти
+        await delay(5000);
+
         const data = await fetchCharacters(name, 1);
+        setLoading(false);
         if (data && data.results) {
             setCharacters(data.results);
             setTotalPages(data.info.pages);
@@ -29,7 +41,9 @@ export default function Home() {
 
     const handleNextPage = async () => {
         if (page < totalPages) {
+            setLoading(true);  
             const data = await fetchCharacters(name, page + 1);
+            setLoading(false); 
             if (data) {
                 setCharacters(data.results);
                 setPage(page + 1);
@@ -39,7 +53,9 @@ export default function Home() {
 
     const handlePrevPage = async () => {
         if (page > 1) {
+            setLoading(true);
             const data = await fetchCharacters(name, page - 1);
+            setLoading(false);
             if (data) {
                 setCharacters(data.results);
                 setPage(page - 1);
@@ -52,6 +68,14 @@ export default function Home() {
             <FindForm onSearch={handleSearch} />
 
             {errorMessage && <div className="mt-5 text-red-500">{errorMessage}</div>}
+
+            {loading && (
+                <div className="mt-5 flex justify-center">
+                    <span className="animate-pulse text-5xl">.</span>
+                    <span className="animate-pulse text-5xl">.</span>
+                    <span className="animate-pulse text-5xl">.</span>
+                </div>
+            )}
 
             <CharacterList characters={characters} />
 
@@ -75,4 +99,4 @@ export default function Home() {
             </div>
         </div>
     );
-};
+}
